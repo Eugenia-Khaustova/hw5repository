@@ -98,9 +98,6 @@ console.log(calcTotalAverage(students));
 function calcAveragePrice(arr) {
   let suvPrice = 0;
   let suvArray = arr.filter((item) => item.type.toLowerCase() == "suv");
-  // suvArray.forEach((el) => {
-  //   suvPrice = el.price.reduce((sum, current) => sum + current, 0);
-  // });
   suvPrice = suvArray.reduce((sum, currrent) => sum + currrent.price, 0);
   return suvPrice / suvArray.length;
 }
