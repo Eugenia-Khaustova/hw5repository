@@ -3,14 +3,8 @@
 // 1. Написать функцию searchString(originalStr, str) . Данная функция должна
 // проверять находится ли подстрока str в основной строке originalStr и
 // возвращать булевое значение
-let result;
 function searchString(originalStr, str) {
-  if (originalStr.includes(str) === true) {
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
+  return originalStr.includes(str);
 }
 
 console.log(searchString("Everything", "every"));
@@ -20,13 +14,9 @@ console.log(searchString("Everything", "Every"));
 // принимать строку. Функция возвращает строку, где первый символ
 // будет с заглавной буквы
 
-let capResult;
-let lowResult;
 function capitalizeFirstLetter(str) {
   let stringArray = str.split("");
-  if (stringArray[0]) {
-    stringArray[0] = stringArray[0].toUpperCase();
-  }
+  stringArray[0] = stringArray[0].toUpperCase();
   stringArray = stringArray.join("");
   return stringArray;
 }
@@ -42,7 +32,8 @@ console.log(capitalizeFirstLetter("hElLo")); // HElLo
 
 function truncate(str, maxlength) {
   if (str.length > maxlength) {
-    return str.substr(0, maxlength) + "...";
+    // return str.substr(0, maxlength) + "...";
+    return `${str.substr(0, maxlength)}...`;
   } else {
     return str;
   }
@@ -57,29 +48,25 @@ console.log(truncate("Hello world", 25)); // Hello world
 //     Должна вывести средний бал по всем студентам
 // На выходе мы должны получить новый массив (после выполнения первой функции!)
 
-function studentAverage(arr) {
-  let sum = 0;
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr[i].marks.length; j++) {
-      sum += arr[i].marks[j];
-    }
-    arr[i].averageMark = sum / arr[i].marks.length;
-    sum = 0;
-  }
-  return arr;
+function calcEachAverage(arr) {
+  let copyArr = arr.map((item) => {
+    return Object.assign({}, item, { averageMark: 0 });
+  });
+  copyArr.forEach((item) => {
+    item.averageMark =
+      item.marks.reduce((sum, current) => sum + current, 0) / item.marks.length;
+  });
+  return copyArr;
 }
 
-let averageMarkArr = 0;
-let arrayObjLength = 0;
-function averageMarkArray(arr) {
+function calcTotalAverage(arr) {
   let sum = 0;
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr[i].marks.length; j++) {
-      sum += arr[i].marks[j];
-    }
-    arrayObjLength += arr[i].marks.length;
-  }
-  return (averageMarkArr = sum / arrayObjLength);
+  let length = 0;
+  arr.forEach((item) => {
+    sum += item.marks.reduce((sum, current) => sum + current, 0);
+    length += item.marks.length;
+  });
+  return sum / length;
 }
 
 const students = [
@@ -100,21 +87,21 @@ const students = [
     marks: [10, 9, 8, 9],
   },
 ];
-console.log(studentAverage(students));
-console.log(averageMarkArray(students));
+console.log(calcEachAverage(students));
+console.log(calcTotalAverage(students));
 
 // 5. Данн массив vehicles. Необходимо написать код, который реализует подсчет
 // средней цены автомобилей типа SUV:
 // Обратите внимание, что поле type может быть написано в любом регистре символов (suv, SUV).
 // Примечание: для решения задачи вам нужно будет использовать методы массивов (а не обычные циклы)
 
-let suvPrice = 0;
-let i = 0;
-function suvAveragePrice(arr) {
-  let suvArray = arr.filter((item) => item.type == "suv" || item.type == "SUV");
-  suvArray.forEach((el) => {
-    suvPrice += el.price;
-  });
+function calcAveragePrice(arr) {
+  let suvPrice = 0;
+  let suvArray = arr.filter((item) => item.type.toLowerCase() == "suv");
+  // suvArray.forEach((el) => {
+  //   suvPrice = el.price.reduce((sum, current) => sum + current, 0);
+  // });
+  suvPrice = suvArray.reduce((sum, currrent) => sum + currrent.price, 0);
   return suvPrice / suvArray.length;
 }
 
@@ -131,7 +118,7 @@ const vehicles = [
   { make: "Ford", model: "Explorer", type: "SUV", price: 31660 },
 ];
 
-console.log(suvAveragePrice(vehicles));
+console.log(calcAveragePrice(vehicles));
 
 // 6. У нас есть массив чисел arr. Нужно получить отсортированную копию, но
 // оставить arr неизменённым. Создайте функцию copySorted(arr), которая будет
@@ -140,17 +127,17 @@ console.log(suvAveragePrice(vehicles));
 // Некоторые из них мы еще не разбирали. Можете написать несколько вариантов реализации.
 
 function copySorted(arr) {
-  return arr.slice().sort();
+  return arr.slice().sort((a, b) => a - b);
 }
 
 function spreadSorted(arr) {
   let spreadCopyArr = [...arr];
-  return spreadCopyArr.sort();
+  return spreadCopyArr.sort((a, b) => a - b);
 }
 
 function arrayFromSorted(arr) {
   let arrayFromCopyArr = Array.from(arr);
-  return arrayFromCopyArr.sort();
+  return arrayFromCopyArr.sort((a, b) => a - b);
 }
 
 let arr = [10, 20, 3, 4, 0, 99, 97];
@@ -178,7 +165,7 @@ let user = {
   city: "London",
 };
 
-console.log(getKeysCount(user))
-console.log(getKeysCount({ name: 'John' })); // 1
-console.log(getKeysCount({ name: 'John', age: 22 })); // 2
-console.log(getKeysCount({ name: 'John', salary: null })); // 2
+console.log(getKeysCount(user));
+console.log(getKeysCount({ name: "John" })); // 1
+console.log(getKeysCount({ name: "John", age: 22 })); // 2
+console.log(getKeysCount({ name: "John", salary: null })); // 2
